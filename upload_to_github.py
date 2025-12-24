@@ -7,13 +7,17 @@ def run_command(command, cwd=None):
     """Run a shell command and print output."""
     print(f"Running: {command}")
     try:
+        # standard git/gh might output utf-8 even on windows, or use system codepage. 
+        # Using errors='replace' is safest to prevent crashes.
         result = subprocess.run(
             command,
             cwd=cwd,
             shell=True,
             check=True,
             text=True,
-            capture_output=True
+            capture_output=True,
+            encoding='utf-8', 
+            errors='replace'
         )
         print(result.stdout)
         return True, result.stdout
